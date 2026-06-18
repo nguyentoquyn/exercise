@@ -1,0 +1,75 @@
+Bài tập 1
+Viết chương trình javascript để sắp xếp 4 số (a, b, c, d). Và in ra kết quả. 
+•	Ví dụ:
+•	Cho a = 3; b = 2; c= 9; d= -1; In ra "9,3,2,-1";
+•	Cho a = 3; b = 3; c= 8; d= -5; In ra "8,3,3,-5";
+•	Đầu vào: a, b, c, d
+•	Đầu ra: sắp xếp 4 số (a, b, c, d). Và in ra kết quả. 
+Gợi ý
+Cố gắng nhớ lại kiến thức if...else
+Ý tưởng:
+1.	So sánh a và b, nếu a < b thì đổi chỗ. 
+2.	So sánh a và c, nếu a < c thì đổi chỗ. 
+3.	So sánh a và d, nếu a < d thì đổi chỗ. 
+Sau bước này, a sẽ là số lớn nhất.
+Tiếp tục:
+4.	So sánh b và c, nếu b < c thì đổi chỗ. 
+5.	So sánh b và d, nếu b < d thì đổi chỗ. 
+Lúc này b sẽ là số lớn thứ hai.
+Cuối cùng:
+6.	So sánh c và d, nếu c < d thì đổi chỗ. 
+Khi đó ta có:
+a ≥ b ≥ c ≥ d
+Code:
+function run(a, b, c, d){
+var sorted_str = "";
+var temp;
+if (a < b) { temp = a; a = b; b = temp; }
+if (b < c) { temp = b; b = c; c = temp; }
+if (c < d) { temp = c; c = d; d = temp; }
+if (a < b) { temp = a; a = b; b = temp; }
+if (b < c) { temp = b; b = c; c = temp; }
+if (a < b) { temp = a; a = b; b = temp; }
+sorted_str = a + "," + b + "," + c + "," + d;
+console.log(sorted_str);
+}
+Kết quả:
+9,3,2,-1
+và
+run(3, 3, 8, -5);
+Kết quả:
+8,3,3,-5
+
+Cách 2:
+
+function run (a,b,c,d){
+    console.log([a,b,c,d].sort((x,y)=>(x-y)));
+}
+
+
+Dưới đây là các nhóm thuật toán cụ thể có cách hoạt động, tên gọi, hoặc mức độ ưu tiên khác nhau tùy thuộc vào engine như V8 (của Google Chrome), SpiderMonkey (của Firefox) hay JavaScriptCore (của Safari): [1, 2]
+1. Thuật toán tối ưu hóa đối tượng (Hidden Classes / Inline Caching)
+Vì JavaScript là ngôn ngữ động, các engine không thể định hình object hoạt động như thế nào ngay từ đầu. Chúng dùng các thuật toán để dự đoán cấu trúc object:
+•	V8 (Ignition & TurboFan): Sử dụng thuật toán tạo Hidden Classes (hay Maps). Nếu các object có cùng cấu trúc, V8 sẽ ánh xạ chúng vào cùng một Hidden Class để tái sử dụng và truy xuất thuộc tính cực nhanh. [1]
+•	SpiderMonkey: Áp dụng kỹ thuật Inline Caching (IC), theo đó engine ghi nhớ các kiểu dữ liệu và vị trí bộ nhớ của các thuộc tính được truy cập nhiều lần, sau đó tối ưu hóa trực tiếp dựa trên dữ liệu đó mà không cần biên dịch lại từ đầu. [1]
+2. Thuật toán biên dịch JIT (Just-In-Time)
+Các engine đều dịch mã JavaScript sang mã máy để chạy nhanh hơn, nhưng chúng chia thành nhiều tầng và sử dụng các thuật toán JIT khác nhau: [1]
+•	V8: Có bộ đôi Ignition (trình thông dịch/biên dịch bytecode) và TurboFan (trình tối ưu hóa). V8 dịch thẳng code JS ra bytecode. [1]
+•	SpiderMonkey: Trải qua nhiều giai đoạn như Baseline Interpreter, sau đó dùng thuật toán tối ưu hóa mang tên WarpMonkey (trước đây là IonMonkey) để tự động biên dịch các đoạn code thường xuyên được thực thi (hot paths). [1, 2]
+•	JavaScriptCore (Safari): Sử dụng thuật toán qua nhiều tầng tinh vi: LLInt (Low-Level Interpreter) -> Baseline JIT -> DFG (Data Flow Graph) -> FTL (Faster Than Light) JIT. [1]
+3. Thuật toán quản lý bộ nhớ và dọn rác (Garbage Collection - GC)
+JavaScript tự động giải phóng bộ nhớ, nhưng thuật toán dọn dẹp các vùng nhớ không còn dùng đến khác nhau tùy từng engine:
+•	V8: Sử dụng thuật toán Orinoco để thực hiện việc dọn rác bất đồng bộ hoặc chạy song song trên nhiều luồng (parallel/concurrent GC) nhằm không làm gián đoạn luồng chính (Main Thread).
+•	SpiderMonkey: Quản lý bằng các thuật toán theo dõi chặt chẽ bộ nhớ đã cấp phát qua cơ chế malloc để kích hoạt dọn rác, tập trung tối ưu cho các tác vụ tải trọng nhẹ trong trình duyệt. [1]
+4. Thuật toán biên dịch WebAssembly (Wasm)
+WebAssembly ngày nay chạy song song với JavaScript. Các thuật toán đọc và biên dịch module Wasm khác nhau tùy từng engine quyết định cấu trúc luồng và bộ nhớ.
+________________________________________
+Tóm lại: Nếu bạn nghe nói một tính năng hay kỹ thuật nào đó phụ thuộc vào engine, điều đó có nghĩa là thông số kỹ thuật chuẩn (ECMAScript) quy định những gì code của bạn phải làm được, nhưng việc thực hiện nó nhanh hay chậm và tiêu tốn bao nhiêu bộ nhớ phụ thuộc hoàn toàn vào cách engine viết thuật toán giải quyết. [1, 2]
+Nếu bạn muốn đào sâu hơn, let me know:
+•	Bạn đang gặp vấn đề về hiệu năng của một đoạn code cụ thể?
+•	Bạn muốn tìm hiểu cách một engine xác định kiểu dữ liệu (Type Inference)?
+•	Hoặc bạn cần so sánh chi tiết giữa V8 và SpiderMonkey trong một ứng dụng cụ thể? [1]
+Hãy chia sẻ thêm, tôi có thể phân tích sâu hơn cho bạn!
+
+
+
